@@ -1,0 +1,10 @@
+<div class="header flex align-items-center justify-content-between w-full p-3">
+    <div class="logo font-italic">Chat AI</div>
+    <p-menubar [model]="items">
+        <ng-template #item let-item>
+            <a [routerLink]="item.route" class="p-menubar-item-link">
+                <span class="ml-2">{{ item.label }}</span>
+            </a>
+        </ng-template>
+    </p-menubar>
+</div>

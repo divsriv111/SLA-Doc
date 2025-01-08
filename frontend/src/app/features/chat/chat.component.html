@@ -1,0 +1,16 @@
+<p-card [style]="{ overflow: 'hidden', height: 'calc(100vh - 110px)' }">
+    <ng-template #header>
+        <p class="text-xl p-3 border-bottom-1">Chat</p>
+    </ng-template>
+    <p>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam
+        deserunt
+        quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate neque quas!
+    </p>
+    <ng-template #footer>
+        <div class="flex gap-4 mt-1 align-items-center">
+            <textarea rows="5" cols="30" pTextarea formControlName="text" class="w-full"></textarea>
+            <p-button label="Send" icon="pi pi-send" class="ml-2"></p-button>
+        </div>
+    </ng-template>
+</p-card>

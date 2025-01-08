@@ -1,0 +1,20 @@
+<div class="home pl-3 pr-3">
+    <h1 class="pt-5 pb-5 gradient-text">Welcome to Chat AI</h1>
+    <div class="saved-chats">
+        <p class="border-bottom-1 text-xl pb-3">My Chats</p>
+        <div class="filter-block">
+            <p-button label="Create new" class="mt-2 mb-2" icon="pi pi-plus"></p-button>
+        </div>
+        <div class="flex gap-5 mt-5">
+            @for(item of savedChats; track item.name){
+                <p-card [style]="{ width: '250px', overflow: 'hidden', height: '200px' }">
+                    <ng-template #header></ng-template>
+                    <p class="text-xl">{{item.name}}</p>
+                    <ng-template #footer>
+                        <p>Jan 5, 2025</p>
+                    </ng-template>
+                </p-card>
+            }
+        </div>
+    </div>
+</div>
