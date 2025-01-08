@@ -1,0 +1,16 @@
+<p-card [style]="{ width: '25rem', overflow: 'hidden' }">
+    <ng-template #header>
+        <h1>Sources</h1>
+        <p-button label="Add source" severity="success" />
+    </ng-template>
+    <div class="flex align-items-center justify-content-between">
+        <label for="ny" class="ml-2">Select all sources</label>
+        <p-checkbox formControlName="selectAll" value="New York" inputId="ny" />
+    </div>
+    @for(item of items; track item.name){
+    <div class="flex align-items-center justify-content-between">
+        <label [for]="item.name" class="ml-2">{{item.name}}</label>
+        <p-checkbox formControlName="city" value="New York" [inputId]="item.name" />
+    </div>
+    }
+</p-card>

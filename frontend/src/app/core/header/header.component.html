@@ -1,0 +1,9 @@
+<div class="header">
+    <p-menubar [model]="items">
+        <ng-template #item let-item>
+            <a [routerLink]="item.route" class="p-menubar-item-link">
+                <span class="ml-2">{{ item.label }}</span>
+            </a>
+        </ng-template>
+    </p-menubar>
+</div>
