@@ -17,7 +17,7 @@ export class HeaderComponent {
       route: '/'
     },
     {
-      label: 'ChatRoom',
+      label: 'Chat Room',
       route: '/chat-room'
     },
   ]

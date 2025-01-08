@@ -1,4 +1,5 @@
-<div class="header">
+<div class="header flex align-items-center justify-content-between w-full p-3">
+    <div class="logo font-italic">Chat AI</div>
     <p-menubar [model]="items">
         <ng-template #item let-item>
             <a [routerLink]="item.route" class="p-menubar-item-link">
