@@ -2,17 +2,19 @@
     <ng-template #header>
         <p class="text-xl p-3 border-bottom-1">Sources</p>
         <div class="flex m-3">
-            <p-button class="add-src-btn w-full" label="Add source" severity="secondary" icon="pi pi-plus" />
+            <p-fileupload mode="basic" chooseLabel="Add source" chooseIcon="pi pi-plus" accept=".pdf" customUpload="true" auto="true" (uploadHandler)="onUpload($event)" class="add-src-btn w-full" />
         </div>
     </ng-template>
+    @if(uploadedFiles.length !== 0){
     <div class="flex align-items-center justify-content-between pb-2">
         <label for="ny" class="ml-2">Select all sources</label>
         <p-checkbox formControlName="selectAll" value="New York" inputId="ny" />
     </div>
-    @for(item of items; track item.name){
+    }
+    @for(item of uploadedFiles; track item.id){
     <div class="flex align-items-center justify-content-between pt-2">
-        <label [for]="item.name" class="ml-2"><i class="pi pi-file-pdf pr-2"></i>{{item.name}}</label>
-        <p-checkbox formControlName="city" value="New York" [inputId]="item.name" />
+        <label [for]="item.id" class="ml-2 file-name"><i class="pi pi-file-pdf pr-2"></i>{{item.file?.name?.toLowerCase()}}</label>
+        <p-checkbox formControlName="city" value="New York" [inputId]="item.id.toString()" />
     </div>
     }
 </p-card>

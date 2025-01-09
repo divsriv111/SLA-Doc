@@ -1,5 +1,18 @@
 .add-src-btn {
+    ::ng-deep p-button {
+        width: 100% !important;
+    }
     ::ng-deep button {
         width: 100% !important;
     }
+    ::ng-deep .filelabel {
+        display: none;
+    }
+}
+.file-name {
+    text-overflow: ellipsis;
+    max-width: 300px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-transform: capitalize;
 }

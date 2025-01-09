@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { NavigationEnd, Router, RouterLink } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { Menubar } from 'primeng/menubar';
 
@@ -11,6 +11,7 @@ import { Menubar } from 'primeng/menubar';
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent {
+  title: string = '';
   items: MenuItem[] = [
     {
       label: 'Home',
@@ -21,4 +22,14 @@ export class HeaderComponent {
       route: '/chat-room'
     },
   ]
+
+  constructor(private router: Router) {}
+
+  ngOnInit(): void {
+    this.router.events.subscribe(event => { 
+      if (event instanceof NavigationEnd) {
+         this.title = (event.url !== '/chat-room') ? '' : 'SLA Group Title';
+      } 
+    });
+  }
 }

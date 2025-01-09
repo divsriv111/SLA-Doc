@@ -3,11 +3,11 @@
     <div class="saved-chats">
         <p class="border-bottom-1 text-xl pb-3">My Chats</p>
         <div class="filter-block">
-            <p-button label="Create new" class="mt-2 mb-2" icon="pi pi-plus"></p-button>
+            <p-button label="Create new" class="mt-2 mb-2" icon="pi pi-plus" (click)="navigateToChat()"></p-button>
         </div>
         <div class="flex gap-5 mt-5">
             @for(item of savedChats; track item.name){
-                <p-card [style]="{ width: '250px', overflow: 'hidden', height: '200px' }">
+                <p-card [style]="{ width: '250px', overflow: 'hidden', height: '200px' }" (click)="navigateToChat()">
                     <ng-template #header></ng-template>
                     <p class="text-xl">{{item.name}}</p>
                     <ng-template #footer>
