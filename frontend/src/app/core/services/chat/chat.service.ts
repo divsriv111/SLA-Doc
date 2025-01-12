@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
-import { Source } from '../../model/source.model';
+import { Source } from '../../models/source.model';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChatService {
 
-  constructor() { }
+  constructor(private httpClient: HttpClient) { }
 
   sources: Source[] = [
     {name: 'SLA Document 1'},
@@ -16,5 +18,13 @@ export class ChatService {
 
   getSources(): Source[] {
     return this.sources;
+  }
+
+  getSavedChats(): Observable<any[]> {
+    return this.httpClient.get<any[]>('https://jsonplaceholder.typicode.com/posts');
+  }
+
+  getChatById(id: string): Observable<any> {
+    return this.httpClient.get<any[]>(`https://jsonplaceholder.typicode.com/posts/${id}`);
   }
 }

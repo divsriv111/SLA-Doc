@@ -6,3 +6,14 @@
     display: inline-block;
     font-size: 4rem;
 }
+.chats-container {
+    max-height: 449px;
+    overflow: auto;
+
+    .chat-title {
+        text-overflow: ellipsis;
+        max-width: 210px;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+}

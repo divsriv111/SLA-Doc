@@ -4,5 +4,5 @@ import { ChatRoomComponent } from './features/chat-room/chat-room.component';
 
 export const routes: Routes = [
     { path: '', component: HomeComponent },
-    { path: 'chat-room', component: ChatRoomComponent },
+    { path: 'chat-room/:id', component: ChatRoomComponent },
 ];
