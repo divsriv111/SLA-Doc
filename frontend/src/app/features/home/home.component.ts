@@ -3,23 +3,28 @@ import { Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { Chat } from '../../core/models/chat.model';
+import { ChatService } from '../../core/services/chat/chat.service';
+import { CreateNewPopupComponent } from '../create-new-popup/create-new-popup.component';
+import { AsyncPipe, CommonModule } from '@angular/common';
+import { Observable, of } from 'rxjs';
 
 @Component({
   selector: 'app-home',
-  imports: [ButtonModule, CardModule],
+  imports: [ButtonModule, CardModule, CreateNewPopupComponent, CommonModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
 export class HomeComponent {
-  savedChats: Chat[] = [
-    {id: 1, name: 'SLA for project 1'},
-    {id: 2, name: 'SLA for project 2'},
-    {id: 3, name: 'SLA for project 3'},
-  ];
+  savedChats$: Observable<Chat[]> | undefined;
+  visible: boolean = false;
   
-  constructor(public router: Router) {}
+  constructor(private router: Router, private chatService: ChatService) {}
 
-  navigateToChat() {
-    this.router.navigate(['/chat-room']);
+  ngOnInit() {
+    this.savedChats$ = this.chatService.getSavedChats();
+  }
+
+  navigateToChat(id: number) {
+    this.router.navigate([`/chat-room/${id}`]);
   }
 }

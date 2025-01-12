@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { NavigationEnd, Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { Menubar } from 'primeng/menubar';
+import { GlobalService } from '../services/global/global.service';
 
 @Component({
   selector: 'app-header',
@@ -10,7 +11,7 @@ import { Menubar } from 'primeng/menubar';
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })
-export class HeaderComponent {
+export class HeaderComponent {  
   title: string = '';
   items: MenuItem[] = [
     {
@@ -23,13 +24,6 @@ export class HeaderComponent {
     },
   ]
 
-  constructor(private router: Router) {}
+  constructor(public globalService: GlobalService) {}
 
-  ngOnInit(): void {
-    this.router.events.subscribe(event => { 
-      if (event instanceof NavigationEnd) {
-         this.title = (event.url !== '/chat-room') ? '' : 'SLA Group Title';
-      } 
-    });
-  }
 }
