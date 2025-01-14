@@ -10,6 +10,11 @@ from app.web.db.models import User, Model
 
 
 def load_model(Model: Model, extract_id_lambda=None):
+    """
+    Decorator to load a model instance based on the provided model ID.
+    The model ID can be extracted from the request using an optional lambda function.
+    If the model instance does not belong to the current user, an Unauthorized exception is raised.
+    """
     def decorator(view):
         @functools.wraps(view)
         def wrapped_view(**kwargs):
@@ -39,6 +44,10 @@ def load_model(Model: Model, extract_id_lambda=None):
 
 
 def login_required(view):
+    """
+    Decorator to ensure that the user is logged in before accessing the view.
+    If the user is not logged in, an Unauthorized exception is raised.
+    """
     @functools.wraps(view)
     def wrapped_view(**kwargs):
         if g.user is None:
@@ -49,11 +58,17 @@ def login_required(view):
 
 
 def add_headers(response):
+    """
+    Add custom headers to the response.
+    """
     response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
     return response
 
 
 def load_logged_in_user():
+    """
+    Load the logged-in user from the session and set it in the global context (g).
+    """
     user_id = session.get("user_id")
 
     if user_id is None:
@@ -66,6 +81,10 @@ def load_logged_in_user():
 
 
 def handle_file_upload(fn):
+    """
+    Decorator to handle file uploads. It saves the uploaded file to a temporary directory,
+    generates a unique file ID, and passes the file information to the view.
+    """
     @functools.wraps(fn)
     def wrapped(*args, **kwargs):
         file = request.files["file"]
@@ -84,6 +103,9 @@ def handle_file_upload(fn):
 
 
 def handle_error(err):
+    """
+    Global error handler to log the error and return a JSON response with the error message.
+    """
     if isinstance(err, IntegrityError):
         logging.error(err)
         return {"message": "In use"}, 400

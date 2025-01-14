@@ -7,6 +7,11 @@ bp = Blueprint("auth", __name__, url_prefix="/api/auth")
 
 @bp.route("/user", methods=["GET"])
 def get_user():
+    """
+    Retrieve the currently authenticated user based on the session 
+    and global context (g.user), returning the user's information 
+    as a dictionary or None.
+    """
     if g.user is not None:
         return g.user.as_dict()
 
@@ -15,6 +20,11 @@ def get_user():
 
 @bp.route("/signup", methods=["POST"])
 def signup():
+    """
+    Sign up a new user by creating a record in the User model with an 
+    email and a hashed password, then store the user ID in the session 
+    and return the new user's data.
+    """
     email = request.json.get("email")
     password = request.json.get("password")
 
@@ -26,6 +36,11 @@ def signup():
 
 @bp.route("/signin", methods=["POST"])
 def signin():
+    """
+    Sign in an existing user by validating their email and password 
+    against a stored hash, setting the user in the session if valid, 
+    and returning the user's data or indicating an error if invalid.
+    """
     email = request.json.get("email")
     password = request.json.get("password")
 

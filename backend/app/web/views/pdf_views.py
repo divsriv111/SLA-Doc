@@ -11,6 +11,9 @@ bp = Blueprint("pdf", __name__, url_prefix="/api/pdfs")
 @bp.route("/", methods=["GET"])
 @login_required
 def list():
+    """
+    List all PDFs for the current logged-in user.
+    """
     pdfs = Pdf.where(user_id=g.user.id)
 
     return Pdf.as_dicts(pdfs)
@@ -20,6 +23,9 @@ def list():
 @login_required
 @handle_file_upload
 def upload_file(file_id, file_path, file_name):
+    """
+    Upload a new PDF file, process it, and record it in the database.
+    """
     res, status_code = files.upload(file_path)
     if status_code >= 400:
         return res, status_code
@@ -35,6 +41,9 @@ def upload_file(file_id, file_path, file_name):
 @login_required
 @load_model(Pdf)
 def show(pdf):
+    """
+    Return the details of the specified PDF.
+    """
     return jsonify(
         {
             "pdf": pdf.as_dict(),

@@ -29,6 +29,15 @@ def select_component(
 
 
 def build_chat(chat_args: ChatArgs):
+    """
+    Build a chat session using the specified components (retriever, LLM, memory).
+    
+    Args:
+        chat_args (ChatArgs): Arguments containing the configuration for the chat session.
+    
+    Returns:
+        StreamingConversationalRetrievalChain: An instance of the chat session configured with the specified components.
+    """
     retriever_name, retriever = select_component(
         "retriever",
         retriever_map,
@@ -51,7 +60,6 @@ def build_chat(chat_args: ChatArgs):
         memory=memory_name
     )
     
-
     condense_question_llm = ChatOpenAI(streaming=False)
 
     return StreamingConversationalRetrievalChain.from_llm(
