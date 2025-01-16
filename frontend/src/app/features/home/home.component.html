@@ -11,7 +11,7 @@
                 <p-card class="col-fixed" [style]="{ width: '250px', overflow: 'hidden', height: '200px' }" (click)="navigateToChat(item.id)">
                     <ng-template #header>
                         <div class="flex justify-content-end p-1">
-                            <p-button severity="secondary" icon="pi pi-trash"></p-button>
+                            <p-button severity="secondary" icon="pi pi-trash" (click)="handleDelete($event)"></p-button>
                         </div>
                     </ng-template>
                     <div class="flex align-items-center justify-content-between">
@@ -23,6 +23,7 @@
                     </ng-template>
                 </p-card>
             }
+            <p-confirmdialog />
         </div>
     </div>
 </div>
