@@ -10,9 +10,6 @@ bp = Blueprint("conversation", __name__, url_prefix="/api/conversations")
 @login_required
 @load_model(Pdf, lambda r: r.args.get("pdf_id"))
 def list_conversations(pdf):
-    """
-    Return a list of conversations for the specified PDF.
-    """
     return [c.as_dict() for c in pdf.conversations]
 
 
@@ -20,9 +17,6 @@ def list_conversations(pdf):
 @login_required
 @load_model(Pdf, lambda r: r.args.get("pdf_id"))
 def create_conversation(pdf):
-    """
-    Create a new conversation for the specified PDF.
-    """
     conversation = Conversation.create(user_id=g.user.id, pdf_id=pdf.id)
 
     return conversation.as_dict()
@@ -32,9 +26,6 @@ def create_conversation(pdf):
 @login_required
 @load_model(Conversation)
 def create_message(conversation):
-    """
-    Add a message to the specified conversation.
-    """
     input = request.json.get("input")
     streaming = request.args.get("stream", False)
 

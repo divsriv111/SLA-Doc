@@ -9,46 +9,26 @@ upload_url = f"{Config.UPLOAD_URL}/upload"
 
 
 def upload(local_file_path: str) -> Tuple[Dict[str, str], int]:
-    """
-    Upload a file to the configured remote server.
-    Returns a tuple of the response data as a dictionary and the HTTP status code.
-    """
     with open(local_file_path, "rb") as f:
         response = requests.post(upload_url, files={"file": f})
         return json.loads(response.text), response.status_code
 
 
 def create_download_url(file_id):
-    """
-    Generate a download URL for the specified file ID on the remote server.
-    """
     return f"{Config.UPLOAD_URL}/download/{file_id}"
 
 
 def download(file_id):
-    """
-    Return a _Download instance that provides functionality for 
-    downloading the specified file.
-    """
     return _Download(file_id)
 
 
 class _Download:
-    """
-    Internal class representing a file download process with a temporary directory.
-    """
     def __init__(self, file_id):
-        """
-        Initialize the download process with a unique file ID.
-        """
         self.file_id = file_id
         self.temp_dir = tempfile.TemporaryDirectory()
         self.file_path = ""
 
     def download(self):
-        """
-        Perform the actual file download from the remote server to a temporary directory.
-        """
         self.file_path = os.path.join(self.temp_dir.name, self.file_id)
         response = requests.get(create_download_url(self.file_id), stream=True)
         with open(self.file_path, "wb") as file:

@@ -12,10 +12,6 @@ bp = Blueprint("score", __name__, url_prefix="/api/scores")
 @login_required
 @load_model(Conversation, lambda r: r.args.get("conversation_id"))
 def update_score(conversation):
-    """
-    Update the score for a conversation. Validates that the score is 
-    a float between -1 and 1, then calls the conversation scoring logic.
-    """
     score = request.json.get("score")
     if not isinstance(score, (int, float)) or score < -1 or score > 1:
         raise BadRequest("Score must be a float between -1 and 1")
@@ -34,9 +30,6 @@ def update_score(conversation):
 @bp.route("/", methods=["GET"])
 @login_required
 def list_scores():
-    """
-    Retrieve a list of all stored scores.
-    """
     scores = get_scores()
 
     return jsonify(scores)

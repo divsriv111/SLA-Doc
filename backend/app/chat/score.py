@@ -2,24 +2,11 @@ import random
 from app.chat.redis import client
 
 def random_component_by_score(component_type, component_map):
-    """
-    Select a component randomly based on its score.
-
-    Args:
-        component_type (str): The type of component ('llm', 'retriever', or 'memory').
-        component_map (dict): A dictionary mapping component names to their details.
-
-    Returns:
-        str: The name of the selected component.
-
-    Raises:
-        ValueError: If the component_type is invalid.
-    """
     # Make sure component_type is 'llm', 'retriever', or 'memory'
     if component_type not in ["llm", "retriever", "memory"]:
         raise ValueError("Invalid component_type")
 
-    # From redis, get the hash containing the sum total scores for the given component_type
+    # From redis, get the hash containing the sum total scores for the given commponent_type
     values = client.hgetall(f"{component_type}_score_values")
     # From redis, get the hash containing the number of times each component has been voted on
     counts = client.hgetall(f"{component_type}_score_counts")

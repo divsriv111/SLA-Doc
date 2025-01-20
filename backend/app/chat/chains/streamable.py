@@ -4,20 +4,7 @@ from threading import Thread
 from app.chat.callbacks.stream import StreamingHandler
 
 class StreamableChain:
-    """
-    A class that represents a streamable chain for processing input and streaming output.
-    """
-
     def stream(self, input):
-        """
-        Stream the output of processing the input using a queue and a streaming handler.
-        
-        Args:
-            input: The input to process.
-        
-        Yields:
-            str: The next token in the streamed output.
-        """
         queue = Queue()
         handler = StreamingHandler(queue)
 
