@@ -41,3 +41,20 @@ def show(pdf):
             "download_url": files.create_download_url(pdf.id),
         }
     )
+
+
+@bp.route("/<string:pdf_id>/extract", methods=["POST"])
+@login_required
+@load_model(Pdf)
+def extract_data(pdf):
+    # Check if data is already extracted
+    if pdf.extracted_data:
+        return jsonify({"data": pdf.extracted_data})
+
+    # Extract data using existing chunks from Pinecone
+    extracted_data = files.extract_pdf_data(pdf.id)
+
+    # Save extracted data
+    pdf.update(extracted_data=extracted_data)
+
+    return jsonify({"data": extracted_data})

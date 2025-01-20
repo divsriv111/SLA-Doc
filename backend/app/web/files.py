@@ -4,6 +4,9 @@ import requests
 import tempfile
 from typing import Tuple, Dict, Any
 from app.web.config import Config
+from langchain.chat_models import ChatOpenAI
+from langchain.schema import HumanMessage
+from app.chat.vector_stores.pinecone import vector_store
 
 upload_url = f"{Config.UPLOAD_URL}/upload"
 
@@ -20,6 +23,44 @@ def create_download_url(file_id):
 
 def download(file_id):
     return _Download(file_id)
+
+
+def extract_pdf_data(pdf_id: str) -> dict:
+    # Get chunks from Pinecone
+    results = vector_store.similarity_search(
+        query="",
+        filter={"pdf_id": pdf_id},
+        k=10  # Get first 10 chunks
+    )
+
+    # Combine text from chunks
+    text = "\n".join([doc.page_content for doc in results])
+
+    # TODO: update prompt for doc
+    # Create extraction prompt with proper string formatting
+    prompt = f"""Extract the following information from the PDF text in JSON format:
+    {{
+        "title": "document title",
+        "summary": "brief summary of the document",
+        "keywords": ["key topics/terms"]
+    }}
+
+    PDF Content:
+    {text}
+
+    Strictly response (JSON only):"""
+
+    # Initialize LLM with correct model name
+    llm = ChatOpenAI(model_name="gpt-4", temperature=0)
+
+    # Get response
+    messages = [HumanMessage(content=prompt)]
+    response = llm.invoke(messages)
+
+    try:
+        return response.content
+    except:
+        return {"error": "Failed to extract data"}
 
 
 class _Download:

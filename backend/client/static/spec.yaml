@@ -347,6 +347,50 @@ paths:
           description: Unauthorized access.
         '404':
           description: Pdf not found.
+  /api/pdfs/{id}/extract:
+    post:
+      tags:
+        - Pdfs
+      summary: Extract structured data from PDF
+      description: Extracts structured information from the PDF using LLM and returns cached result if already processed
+      parameters:
+        - name: id
+          in: path
+          description: ID of the pdf to extract data from
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful extraction or returns cached data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      title:
+                        type: string
+                        description: Document title
+                      summary: 
+                        type: string
+                        description: Brief summary of the document
+                      keywords:
+                        type: array
+                        items:
+                          type: string
+                        description: Key topics/terms from the document
+        '401':
+          description: Unauthorized access
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: PDF not found
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          description: Internal server error
+          $ref: '#/components/responses/ServerError'
 
 components:
   schemas:
