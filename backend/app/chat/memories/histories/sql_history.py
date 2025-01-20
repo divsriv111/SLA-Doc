@@ -3,7 +3,8 @@ from langchain.schema import BaseChatMessageHistory
 
 from app.web.api import (
     get_messages_by_conversation_id,
-    add_message_to_conversation
+    add_message_to_conversation,
+    clear_conversation
 )
 
 class SqlMessageHistory(BaseChatMessageHistory, BaseModel):
@@ -48,4 +49,4 @@ class SqlMessageHistory(BaseChatMessageHistory, BaseModel):
         Returns:
             None
         """
-        pass
+        return clear_conversation(self.conversation_id)

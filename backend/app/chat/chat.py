@@ -1,5 +1,5 @@
 import random
-from langchain_community.chat_models import ChatOpenAI
+from langchain_openai import ChatOpenAI
 from app.chat.models import ChatArgs
 from app.chat.vector_stores import retriever_map
 from app.chat.llms import llm_map
@@ -10,6 +10,7 @@ from app.web.api import (
     get_conversation_components
 )
 from app.chat.score import random_component_by_score
+
 
 def select_component(
     component_type, component_map, chat_args
@@ -31,10 +32,10 @@ def select_component(
 def build_chat(chat_args: ChatArgs):
     """
     Build a chat session using the specified components (retriever, LLM, memory).
-    
+
     Args:
         chat_args (ChatArgs): Arguments containing the configuration for the chat session.
-    
+
     Returns:
         StreamingConversationalRetrievalChain: An instance of the chat session configured with the specified components.
     """
@@ -59,7 +60,7 @@ def build_chat(chat_args: ChatArgs):
         retriever=retriever_name,
         memory=memory_name
     )
-    
+
     condense_question_llm = ChatOpenAI(streaming=False)
 
     return StreamingConversationalRetrievalChain.from_llm(
@@ -69,3 +70,16 @@ def build_chat(chat_args: ChatArgs):
         retriever=retriever,
         metadata=chat_args.metadata.model_dump()  # Updated
     )
+
+
+def run_background_llm_process(chat_args: ChatArgs, prompt: str):
+    """
+    Runs the LLM in the background without affecting the conversation.
+    """
+    component_type = "llm"
+    component_map = llm_map
+
+    random_name = random_component_by_score(component_type, component_map)
+    builder = component_map[random_name]
+    _, llm = random_name, builder(chat_args)
+    return llm.predict(prompt)

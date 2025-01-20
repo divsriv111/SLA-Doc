@@ -1,4 +1,5 @@
-from langchain_community.chat_models import ChatOpenAI
+from langchain_openai import ChatOpenAI
+
 
 def build_llm(chat_args, model_name):
     return ChatOpenAI(

@@ -4,6 +4,7 @@ from app.web.hooks import login_required, handle_file_upload, load_model
 from app.web.db.models import Pdf
 from app.web.tasks.embeddings import process_document
 from app.web import files
+from app.chat import run_background_llm_process, ChatArgs
 
 bp = Blueprint("pdf", __name__, url_prefix="/api/pdfs")
 
@@ -50,3 +51,31 @@ def show(pdf):
             "download_url": files.create_download_url(pdf.id),
         }
     )
+
+
+@bp.route("/<string:pdf_id>/json-analyze", methods=["POST"])
+@login_required
+@load_model(Pdf)
+def analyze_pdf(pdf):
+    # TODO: Implement the LLM process
+    prompt = "Analyze this PDF and return JSON in the format {\"name\":..., ...}"
+
+    chat_args = ChatArgs(
+        pdf_id=pdf.id,
+        metadata={
+            "user_id": g.user.id,
+            "pdf_id": pdf.id,
+        },
+    )
+
+    output = run_background_llm_process(chat_args, prompt)
+    pdf.analyzed_data = output
+    pdf.save()
+    return pdf.as_dict()
+
+
+@bp.route("/<string:pdf_id>/sla-json", methods=["GET"])
+@login_required
+@load_model(Pdf)
+def get_analysis(pdf):
+    return jsonify({"analysis": pdf.analyzed_data})

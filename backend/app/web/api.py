@@ -63,3 +63,12 @@ def set_conversation_components(
     """
     conversation = Conversation.find_by(id=conversation_id)
     conversation.update(llm=llm, retriever=retriever, memory=memory)
+
+
+def clear_conversation(conversation_id: str) -> None:
+    """
+    Clears all messages for a conversation
+    """
+    messages = Message.query.filter_by(conversation_id=conversation_id).all()
+    for msg in messages:
+        msg.delete()
