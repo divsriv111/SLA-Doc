@@ -2,11 +2,13 @@
     <ng-template #header>
         <p class="text-xl p-3 border-bottom-1">Chat</p>
     </ng-template>
+    <div class="chats-container">
     @for(message of conversation; track message.id){
         <div class="flex gap-4 mt-1 pl-2 pr-2">
             <p>{{message.text}}</p>
         </div>
     }
+    </div>
     <ng-template #footer>
         <form [formGroup]="form">
             <div class="flex gap-4 mt-1 pr-2 pt-2 align-items-center border-1 border-round-lg">

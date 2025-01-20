@@ -4,3 +4,7 @@
     box-shadow: none;
     resize: none;
 }
+.chats-container {
+    max-height: calc(100vh - 359px);
+    overflow-y: auto;
+}
