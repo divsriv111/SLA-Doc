@@ -45,7 +45,14 @@ def register_blueprints(app):
 
 
 def register_hooks(app):
-    CORS(app)
+    CORS(app,
+         resources={r"/*": {
+             "origins": "*",
+             "allow_headers": "*",
+             "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
+             "supports_credentials": True
+         }}
+         )
     app.before_request(load_logged_in_user)
     app.after_request(add_headers)
     app.register_error_handler(Exception, handle_error)
