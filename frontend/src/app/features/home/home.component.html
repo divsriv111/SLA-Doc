@@ -4,7 +4,7 @@
         <p class="border-bottom-1 text-xl pb-3">My Chats</p>
         <div class="filter-block">
             <p-button label="Create new" class="mt-2 mb-2" icon="pi pi-plus" (click)="visible = true"></p-button>
-            <app-create-new-popup [(visible)]="visible" (onSubmit)="navigateToChat('0')"></app-create-new-popup>
+            <app-create-new-popup [(visible)]="visible" (onSubmit)="navigateToChat(0)"></app-create-new-popup>
         </div>
         <div class="grid gap-5 mt-5 chats-container">
             @for(item of savedChats$ | async; track item.id){
@@ -15,7 +15,7 @@
                         </div>
                     </ng-template>
                     <div class="flex align-items-center justify-content-between">
-                        <p class="text-xl chat-title">{{item.name}}</p>
+                        <p class="text-xl chat-title">{{item.title}}</p>
                     </div>
                     <ng-template #footer>
                         <p class="inline">Jan 5, 2025</p> . 
