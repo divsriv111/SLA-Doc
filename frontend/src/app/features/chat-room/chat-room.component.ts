@@ -11,15 +11,22 @@ import { ChatService } from '../../core/services/chat/chat.service';
   styleUrl: './chat-room.component.scss'
 })
 export class ChatRoomComponent {
+  private _id: string = '';
 
   constructor(private chatService: ChatService, private globalService: GlobalService) {}
 
-  @Input() set id(value: string) {
+  @Input() 
+  get id(): string {
+    return this._id;
+  }
+
+  set id(value: string) {
+    this._id = value;
     if(value == '0') {
       this.globalService.chatTitle = 'New Chat';
     } else {
-      this.chatService.getChatById(value).subscribe(chat => {
-        this.globalService.chatTitle = chat.title;
+      this.chatService.getPdfById(value).subscribe(chat => {
+        this.globalService.chatTitle = chat?.pdf?.name;
       });
     }
   }
