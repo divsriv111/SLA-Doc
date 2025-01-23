@@ -36,6 +36,14 @@ export class ChatService {
     return this.httpClient.get<any[]>(`${this.apiUrl}/conversations?pdf_id=${id}`, { withCredentials: true });
   }
 
+  extractJSON(id: string){
+    return this.httpClient.post(`${this.apiUrl}/pdfs/${id}/extract`, {}, { withCredentials: true });
+  }
+
+  initiateConversation(pdf_id: string) {
+    return this.httpClient.post(`${this.apiUrl}/conversations?pdf_id=${pdf_id}`, {}, { withCredentials: true });
+  }
+
   getAiAnswer(id: string, input: any) {
     return fetch(`${this.apiUrl}/conversations/${id}/messages?stream=true`, {
       method: 'POST',
@@ -65,5 +73,14 @@ export class ChatService {
       console.error('Stream reading error:', error);
       this.messageSubject.error(error);
     }
+  }
+
+  postPdf(file: File) {
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    return this.httpClient.post(`${this.apiUrl}/pdfs`, formData, {
+      withCredentials: true
+    });
   }
 }

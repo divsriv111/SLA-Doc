@@ -5,16 +5,18 @@
     </div>
     <p-menubar [model]="items">
         <ng-template #item let-item>
-            <ng-container *ngIf="item.route; else elseBlock">
-                <a [routerLink]="item.route" class="p-menubar-item-link">
-                    <span class="ml-2">{{ item.label }}</span>
-                </a>
+            <ng-container *ngIf="item.visible">
+                <ng-container *ngIf="item.route; else actionBlock">
+                    <a [routerLink]="item.route" class="p-menubar-item-link">
+                        <span class="ml-2">{{ item.label }}</span>
+                    </a>
+                </ng-container>
+                <ng-template #actionBlock>
+                    <a (click)="item.action()" class="p-menubar-item-link">
+                        <span class="ml-2">{{ item.label }}</span>
+                    </a>
+                </ng-template>
             </ng-container>
-            <ng-template #elseBlock>
-                <a (click)="item.action()" class="p-menubar-item-link">
-                    <span class="ml-2">{{ item.label }}</span>
-                </a>
-            </ng-template>
         </ng-template>
     </p-menubar>
 </div>

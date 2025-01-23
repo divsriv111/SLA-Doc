@@ -3,10 +3,11 @@ import { SourceListComponent } from '../source-list/source-list.component';
 import { ChatComponent } from '../chat/chat.component';
 import { GlobalService } from '../../core/services/global/global.service';
 import { ChatService } from '../../core/services/chat/chat.service';
+import { FilePreviewComponent } from '../file-preview/file-preview.component';
 
 @Component({
   selector: 'app-chat-room',
-  imports: [SourceListComponent, ChatComponent],
+  imports: [SourceListComponent, ChatComponent, FilePreviewComponent],
   templateUrl: './chat-room.component.html',
   styleUrl: './chat-room.component.scss'
 })
