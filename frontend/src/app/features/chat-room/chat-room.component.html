@@ -3,6 +3,8 @@
         <app-source-list></app-source-list>
     </div>
     <div class="flex-grow-1 pr-3">
-        <app-chat></app-chat>
+        @if(id){
+            <app-chat [id]="id"></app-chat>
+        } 
     </div>
 </div>
