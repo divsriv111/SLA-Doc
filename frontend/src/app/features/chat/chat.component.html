@@ -2,10 +2,19 @@
     <ng-template #header>
         <p class="text-xl p-3 border-bottom-1">Chat</p>
     </ng-template>
-    <div class="chats-container">
+    <div class="chats-container" #chatContainer>
     @for(message of conversation; track message.id){
-        <div class="flex gap-4 mt-1 pl-2 pr-2">
-            <p>{{message.text}}</p>
+        <div class="flex gap-4 mt-3 pl-2 pr-2" [ngClass]="{'justify-content-end': message.role === 'human'}">
+            <div [class]="message.role === 'ai' ? 'p-3 border-round-lg' : 'bg-green text-white p-3 border-round-lg'">
+                <p>{{message.content}}</p>
+            </div>
+        </div>
+    }
+    @if(message){
+        <div class="flex gap-4 mt-3 pl-2 pr-2">
+            <div class="p-3 border-round-lg">
+                <p [innerHTML]="message"></p>
+            </div>
         </div>
     }
     </div>
