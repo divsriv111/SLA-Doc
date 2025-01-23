@@ -14,33 +14,47 @@ import { AuthService } from '../auth/auth.service';
 })
 export class HeaderComponent {  
   title: string = '';
-  items: MenuItem[] = [
-    {
-      label: 'Home',
-      route: '/'
-    },
-    {
-      label: 'Login',
-      route: '/login'
-    },
-    {
-      label: 'Sign Up',
-      route: '/register'
-    },
-    {
-      label: 'Logout',
-      action: () => {
-        this.authService.logout().subscribe({next: () => {
-          this.router.navigate(['/login']);
-        }});
-      }
-    },
-  ]
+  items: MenuItem[] = [];
 
   constructor(
     public globalService: GlobalService, 
     private authService: AuthService, 
     private router: Router
-  ) {}
+  ) {
+    this.authService.isAuthenticated$.subscribe(isAuthenticated => {
+      this.updateMenuItems(isAuthenticated);
+    });
+  }
+
+  private updateMenuItems(isAuthenticated: boolean) {
+    this.items = [
+      {
+        label: 'Home',
+        route: '/',
+        visible: isAuthenticated
+      },
+      {
+        label: 'Login',
+        route: '/login',
+        visible: !isAuthenticated
+      },
+      {
+        label: 'Sign Up',
+        route: '/register',
+        visible: !isAuthenticated
+      },
+      {
+        label: 'Logout',
+        visible: isAuthenticated,
+        action: () => {
+          this.authService.logout().subscribe({
+            next: () => {
+              this.router.navigate(['/login']);
+            }
+          });
+        }
+      }
+    ];
+  }
 
 }
