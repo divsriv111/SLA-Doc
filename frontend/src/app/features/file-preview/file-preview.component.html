@@ -1,0 +1,6 @@
+<p-card [style]="{ width: '20rem', overflow: 'hidden', height: 'calc(100vh - 110px)' }">
+    <ng-template #header>
+        <p class="text-xl p-3 border-bottom-1">JSON</p>
+    </ng-template>
+    <p>{{extractedJSON | json}}</p>
+</p-card>

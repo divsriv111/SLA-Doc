@@ -10,6 +10,12 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
+  signup(credentials: {email: string, password: string}) {
+    return this.http.post(`${this.apiUrl}/auth/signup`, credentials, {
+      withCredentials: true 
+    });
+  }
+
   login(credentials: {email: string, password: string}) {
     return this.http.post(`${this.apiUrl}/auth/signin`, credentials, {
       withCredentials: true 

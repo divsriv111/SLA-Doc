@@ -26,5 +26,25 @@ export class SourceListComponent {
     for (let file of event.files) {
       this.uploadedFiles.push({file, id: this.uploadedFiles.length+1});
     }
+    const file = event.files[0];
+    this.chatService.postPdf(file).subscribe({
+      next: (response: any) => {
+        this.startConversation(response.id);
+      },
+      error: (error) => {
+        console.error('Upload failed', error);
+      }
+    });
+  }
+
+  startConversation(pdf_id: string) {
+    this.chatService.initiateConversation(pdf_id).subscribe({
+      next: (response) => {
+        console.log('Conversation started', response);
+      },
+      error: (error) => {
+        console.error('Failed to start conversation', error);
+      }
+    });
   }
 }

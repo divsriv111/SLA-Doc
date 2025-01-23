@@ -24,6 +24,10 @@ export class HeaderComponent {
       route: '/login'
     },
     {
+      label: 'Sign Up',
+      route: '/register'
+    },
+    {
       label: 'Logout',
       action: () => {
         this.authService.logout().subscribe({next: () => {

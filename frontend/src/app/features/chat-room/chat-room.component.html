@@ -4,7 +4,12 @@
     </div>
     <div class="flex-grow-1 pr-3">
         @if(id){
-            <app-chat [id]="id"></app-chat>
+        <app-chat [id]="id"></app-chat>
         } 
+    </div>
+    <div class="flex-1 pr-3">
+        @if(id){
+        <app-file-preview [id]="id"></app-file-preview>
+        }
     </div>
 </div>
