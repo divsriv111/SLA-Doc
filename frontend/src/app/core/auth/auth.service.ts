@@ -1,6 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, tap } from 'rxjs';
+import { BehaviorSubject, catchError, of, tap } from 'rxjs';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
@@ -8,21 +9,39 @@ import { BehaviorSubject, tap } from 'rxjs';
 export class AuthService {
   private apiUrl = 'http://localhost:8000/api';  
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
-  isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
+  private loadingSubject = new BehaviorSubject<boolean>(true);
 
-  constructor(private http: HttpClient) {
-    this.getCurrentUser().subscribe();
+  isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
+  isLoading$ = this.loadingSubject.asObservable();
+
+  constructor(
+    private http: HttpClient,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {
+    if (isPlatformBrowser(this.platformId)) {
+      this.checkAuthStatus();
+    } else {
+      this.loadingSubject.next(false);
+    }
+  }
+
+  private checkAuthStatus(): void {
+    this.getCurrentUser().pipe(
+      catchError(() => of(null))
+    ).subscribe({
+      next: (user) => this.isAuthenticatedSubject.next(!!user),
+      complete: () => this.loadingSubject.next(false)
+    });
   }
 
   getCurrentUser() {
-    return this.http.get(`${this.apiUrl}/auth/user`, { withCredentials: true }).pipe(
-      tap({
-        next: (user) => {
-          console.log('success api', user);
-          this.isAuthenticatedSubject.next(!!user)},
-        error: () => {console.log('error api'); this.isAuthenticatedSubject.next(false)}
-      })
-    );
+    return this.http.get(`${this.apiUrl}/auth/user`, {
+      withCredentials: true
+    });
+  }
+
+  get isAuthenticated(): boolean {
+    return this.isAuthenticatedSubject.value;
   }
 
   signup(credentials: {email: string, password: string}) {
@@ -35,7 +54,10 @@ export class AuthService {
     return this.http.post(`${this.apiUrl}/auth/signin`, credentials, {
       withCredentials: true 
     }).pipe(
-      tap(() => this.isAuthenticatedSubject.next(true))
+      tap(() => {
+        this.isAuthenticatedSubject.next(true);
+        this.loadingSubject.next(false);
+      })
     );
   }
 
@@ -43,7 +65,10 @@ export class AuthService {
     return this.http.post(`${this.apiUrl}/auth/signout`, {}, {
       withCredentials: true 
     }).pipe(
-      tap(() => this.isAuthenticatedSubject.next(false))
+      tap(() => {
+        this.isAuthenticatedSubject.next(true);
+        this.loadingSubject.next(false);
+      })
     );
   }
 }
