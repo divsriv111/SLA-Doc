@@ -42,7 +42,8 @@ def extract_pdf_data(pdf_id: str) -> dict:
     {{
         "title": "document title",
         "summary": "brief summary of the document",
-        "keywords": ["key topics/terms"]
+        "keywords": ["key topics/terms"],
+        "references": ["references in the document with the page number and line number"]
     }}
 
     PDF Content:
