@@ -9,6 +9,7 @@ import { Observable } from 'rxjs';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Pdf } from '../../core/models/pdf.model';
+import { GlobalService } from '../../core/services/global/global.service';
 
 
 @Component({
@@ -26,9 +27,12 @@ export class HomeComponent {
     private router: Router, 
     private chatService: ChatService, 
     private confirmationService: ConfirmationService, 
-    private messageService: MessageService) {}
+    private messageService: MessageService,  
+    private globalService: GlobalService
+  ) {}
 
   ngOnInit() {
+    this.globalService.chatTitle = '';
     this.savedChats$ = this.chatService.getPdfs();
   }
 

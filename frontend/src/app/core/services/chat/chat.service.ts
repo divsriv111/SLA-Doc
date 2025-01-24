@@ -32,7 +32,7 @@ export class ChatService {
     return this.httpClient.get<any>(`${this.apiUrl}/pdfs/${id}`, { withCredentials: true });
   }
 
-  getConversations(id: string){
+  getChatHistoryByPdf(id: string){
     return this.httpClient.get<any[]>(`${this.apiUrl}/conversations?pdf_id=${id}`, { withCredentials: true });
   }
 
@@ -83,4 +83,5 @@ export class ChatService {
       withCredentials: true
     });
   }
+
 }

@@ -1,6 +1,12 @@
 <p-card [style]="{ overflow: 'hidden', height: 'calc(100vh - 110px)' }">
     <ng-template #header>
-        <p class="text-xl p-3 border-bottom-1">Chat</p>
+        <div class="border-bottom-1 flex align-items-center justify-content-between">
+            <p class="text-xl p-3">Chat</p>
+            <div class="flex gap-2 mr-3">
+                <p-select [(ngModel)]="history" (onChange)="handleHistoryChange($event)" [options]="chatHistory" optionLabel="id" placeholder="History" class="w-56" />
+                <p-button size="large" (click)="addNewChatHistory()" label="New Chat" />
+            </div>
+        </div>
     </ng-template>
     <div class="chats-container" #chatContainer>
     @for(message of conversation; track message.id){
@@ -10,10 +16,10 @@
             </div>
         </div>
     }
-    @if(message){
+    @if(aiResponse){
         <div class="flex gap-4 mt-3 pl-2 pr-2">
             <div class="p-3 border-round-lg">
-                <p [innerHTML]="message"></p>
+                <p [innerHTML]="aiResponse"></p>
             </div>
         </div>
     }
@@ -21,8 +27,8 @@
     <ng-template #footer>
         <form [formGroup]="form">
             <div class="flex gap-4 mt-1 pr-2 pt-2 align-items-center border-1 border-round-lg">
-                <textarea (keyup.enter)="send()" rows="4" cols="30" pTextarea formControlName="text" class="w-full chat-text"></textarea>
-                <p-button icon="pi pi-send" class="ml-2" [rounded]="true" size="large" (click)="send()"></p-button>
+                <textarea (keyup.enter)="sendQuery()" rows="4" cols="30" pTextarea formControlName="text" class="w-full chat-text"></textarea>
+                <p-button icon="pi pi-send" class="ml-2" [rounded]="true" size="large" (click)="sendQuery()"></p-button>
             </div>
         </form>
     </ng-template>
