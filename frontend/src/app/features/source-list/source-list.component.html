@@ -13,7 +13,7 @@
     }
     @for(item of pdfList; track item.id){
     <div class="flex align-items-center justify-content-between pt-2">
-        <label [for]="item.id" class="ml-2 file-name"><i class="pi pi-file-pdf pr-2"></i>{{item.name?.toLowerCase()}}</label>
+        <label [for]="item.id" class="ml-2 file-name"><i class="pi pi-file-pdf pr-2"></i>{{item.name.toLowerCase()}}</label>
         <p-checkbox formControlName="city" value="New York" [inputId]="item.id" (onChange)="handleCheckboxChange($event, item.id)"/>
     </div>
     }

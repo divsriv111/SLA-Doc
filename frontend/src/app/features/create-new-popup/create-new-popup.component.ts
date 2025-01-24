@@ -5,6 +5,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ChatService } from '../../core/services/chat/chat.service';
 import { FileUpload } from 'primeng/fileupload';
 import { FormsModule } from '@angular/forms';
+import { LoadingService } from '../../core/services/loading/loading.service';
 
 @Component({
   selector: 'app-create-new-popup',
@@ -20,7 +21,7 @@ export class CreateNewPopupComponent {
   groupTitle: string = '';
   fileName: string = '';
 
-  constructor(private chatService: ChatService) {}
+  constructor(private chatService: ChatService, private loadingService: LoadingService) {}
 
   closePopup() {
     this.visible = false;
@@ -28,12 +29,14 @@ export class CreateNewPopupComponent {
   }
 
   create(){
+    this.loadingService.show();
     this.chatService.postPdf(this.file, this.groupTitle).subscribe({
       next: (response: any) => {
         console.log('File uploaded successfully', response);
         this.startConversation(response.id, response.group_id);
       },
       error: (error) => {
+        this.loadingService.hide();
         console.error('Upload failed', error);
       }
     });
@@ -47,11 +50,13 @@ export class CreateNewPopupComponent {
   startConversation(pdf_id: string, group_id: string) {
     this.chatService.initiateConversation(pdf_id).subscribe({
       next: (response) => {
+        this.loadingService.hide();
         console.log('Conversation started', response);
         this.onSubmit.emit(group_id);
         this.closePopup();
       },
       error: (error) => {
+        this.loadingService.hide();
         console.error('Failed to start conversation', error);
       }
     });
