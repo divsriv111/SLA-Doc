@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, SimpleChanges } from '@angular/core';
 import { ChatService } from '../../core/services/chat/chat.service';
 import { CommonModule } from '@angular/common';
 import { CardModule } from 'primeng/card';
@@ -15,11 +15,13 @@ export class FilePreviewComponent {
 
   constructor(private chatService: ChatService) {}
 
-  ngOnInit() {
-    this.chatService.extractJSON(this.id).subscribe(response => {
-      console.log('JSON response ', response);
-      this.extractedJSON = response;
-    });
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['id'] && changes['id'].currentValue && changes['id'].currentValue !== changes['id'].previousValue) {
+      this.chatService.extractJSON(this.id).subscribe(response => {
+        console.log('JSON response ', response);
+        this.extractedJSON = response;
+      });
+    }
   }
 
 }

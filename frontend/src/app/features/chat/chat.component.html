@@ -4,7 +4,7 @@
             <p class="text-xl p-3">Chat</p>
             <div class="flex gap-2 mr-3">
                 <p-select [(ngModel)]="history" (onChange)="handleHistoryChange($event)" [options]="chatHistory" optionLabel="id" placeholder="History" class="w-56" />
-                <p-button size="large" (click)="addNewChatHistory()" label="New Chat" />
+                <p-button size="large" (click)="addNewChatHistory()" label="New Chat" [disabled]="!id" />
             </div>
         </div>
     </ng-template>
@@ -28,7 +28,7 @@
         <form [formGroup]="form">
             <div class="flex gap-4 mt-1 pr-2 pt-2 align-items-center border-1 border-round-lg">
                 <textarea (keyup.enter)="sendQuery()" rows="4" cols="30" pTextarea formControlName="text" class="w-full chat-text"></textarea>
-                <p-button icon="pi pi-send" class="ml-2" [rounded]="true" size="large" (click)="sendQuery()"></p-button>
+                <p-button icon="pi pi-send" class="ml-2" [rounded]="true" size="large" (click)="sendQuery()" [disabled]="!id"></p-button>
             </div>
         </form>
     </ng-template>

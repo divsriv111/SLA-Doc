@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, SimpleChanges, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
@@ -41,11 +41,16 @@ export class ChatComponent {
     });
   }
 
-  async ngOnInit(){
-    await this.getChatHistory();
-    this.history = this.chatHistory[0];
-    this.conversation = this.chatHistory[0].messages;
-    this.conversationId = this.chatHistory[0].id;
+  async ngOnChanges(changes: SimpleChanges) {
+    if (changes['id'] && changes['id'].currentValue && changes['id'].currentValue !== changes['id'].previousValue) {
+      await this.getChatHistory();
+      if (this.chatHistory.length > 0) {
+        this.history = this.chatHistory[0];
+        this.conversation = this.chatHistory[0].messages;
+        this.conversationId = this.chatHistory[0].id;
+      }
+      this.aiResponse = '';
+    }
   }
 
   private scrollToBottom(): void {
@@ -55,6 +60,7 @@ export class ChatComponent {
   }
 
   async sendQuery(){
+    if(!this.id) return;
     await this.getChatHistory();
     this.reloadConversation();
     const content = this.form.value.text;

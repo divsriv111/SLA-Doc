@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
-import { CheckboxModule } from 'primeng/checkbox';
+import { CheckboxChangeEvent, CheckboxModule } from 'primeng/checkbox';
 import { CardModule } from 'primeng/card';
 import { FileUploadModule } from 'primeng/fileupload';
 import { ChatService } from '../../core/services/chat/chat.service';
-import { Upload } from '../../core/models/upload.model';
+import { Pdf } from '../../core/models/pdf.model';
 
 @Component({
   selector: 'app-source-list',
@@ -13,28 +13,35 @@ import { Upload } from '../../core/models/upload.model';
   styleUrl: './source-list.component.scss'
 })
 export class SourceListComponent {
-  uploadedFiles: Upload[] = [];
+  @Input() pdfList: Pdf[] = [];
+  @Output() onDocChange: EventEmitter<string> = new EventEmitter<string>();
 
   constructor(public chatService: ChatService) {}
 
-  ngOnInit() {
-    const savedFiles = this.chatService.getSources();
-    this.uploadedFiles = savedFiles.map((file, index) => ({file, id: index+1}));
+  ngOnInit() {  }
+
+  handleCheckboxChange(event: CheckboxChangeEvent, id: string) {
+    if(event.checked){
+      this.onDocChange.emit(id);
+    }
   }
 
   onUpload(event: any) {
     for (let file of event.files) {
-      this.uploadedFiles.push({file, id: this.uploadedFiles.length+1});
+      this.pdfList.push({name: 'New File', id: `new_pdf_${this.pdfList.length+1}`});
     }
-    const file = event.files[0];
-    this.chatService.postPdf(file).subscribe({
-      next: (response: any) => {
-        this.startConversation(response.id);
-      },
-      error: (error) => {
-        console.error('Upload failed', error);
-      }
-    });
+    if(this.pdfList.length > 0){
+      const {group_id, group_title} = this.pdfList[0];
+      const file = event.files[0];
+      this.chatService.postPdf(file, group_title, group_id).subscribe({
+        next: (response: any) => {
+          this.startConversation(response.id);
+        },
+        error: (error) => {
+          console.error('Upload failed', error);
+        }
+      });
+    }
   }
 
   startConversation(pdf_id: string) {

@@ -10,6 +10,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Pdf } from '../../core/models/pdf.model';
 import { GlobalService } from '../../core/services/global/global.service';
+import { Group } from '../../core/models/group.model';
 
 
 @Component({
@@ -21,6 +22,7 @@ import { GlobalService } from '../../core/services/global/global.service';
 })
 export class HomeComponent {
   savedChats$: Observable<Pdf[]> | undefined;
+  chatRooms$: Observable<Group[]> | undefined;
   visible: boolean = false;
 
   constructor(
@@ -34,6 +36,7 @@ export class HomeComponent {
   ngOnInit() {
     this.globalService.chatTitle = '';
     this.savedChats$ = this.chatService.getPdfs();
+    this.chatRooms$ = this.chatService.getChatRooms();
   }
 
   navigateToChat(id: string) {
