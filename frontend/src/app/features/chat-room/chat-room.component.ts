@@ -4,6 +4,7 @@ import { ChatComponent } from '../chat/chat.component';
 import { GlobalService } from '../../core/services/global/global.service';
 import { ChatService } from '../../core/services/chat/chat.service';
 import { FilePreviewComponent } from '../file-preview/file-preview.component';
+import { Pdf } from '../../core/models/pdf.model';
 
 @Component({
   selector: 'app-chat-room',
@@ -13,6 +14,8 @@ import { FilePreviewComponent } from '../file-preview/file-preview.component';
 })
 export class ChatRoomComponent {
   private _id: string = '';
+  pdfList: Pdf[] = [];
+  currentDocId: string = '';
 
   constructor(private chatService: ChatService, private globalService: GlobalService) {}
 
@@ -23,13 +26,16 @@ export class ChatRoomComponent {
 
   set id(value: string) {
     this._id = value;
-    if(value == '0') {
-      this.globalService.chatTitle = 'New Chat';
-    } else {
-      this.chatService.getPdfById(value).subscribe(chat => {
-        this.globalService.chatTitle = chat?.pdf?.name;
-      });
-    }
+    this.chatService.getPdfsByGroupId(value).subscribe(pdfs => {
+      if(pdfs.length !== 0){
+        this.globalService.chatTitle = pdfs[0].group_title;
+        this.pdfList = pdfs;
+      }
+    })
+  }
+
+  documentChange(id: string) {
+    this.currentDocId = id;
   }
 
 }

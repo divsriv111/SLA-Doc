@@ -1,25 +1,29 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { Component, ElementRef, Input, SimpleChanges, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { TextareaModule } from 'primeng/textarea';
 import { ChatService } from '../../core/services/chat/chat.service';
 import { CommonModule } from '@angular/common';
+import { SelectChangeEvent, SelectModule } from 'primeng/select';
+import { Message } from '../../core/models/message.model';
+import { Conversation } from '../../core/models/conversation.model';
 
 @Component({
   selector: 'app-chat',
-  imports: [CardModule, TextareaModule, ButtonModule, ReactiveFormsModule, CommonModule],
+  imports: [CardModule, TextareaModule, ButtonModule, ReactiveFormsModule, SelectModule, CommonModule, FormsModule],
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.scss'
 })
 export class ChatComponent {
-
   @Input() id: string = '';
   @ViewChild('chatContainer') private chatContainer!: ElementRef;
-  conversation: {content: string, id: string, role: 'human'|'ai'}[] = [];
+  chatHistory: Conversation[] = [];
+  conversation: Message[] = [];
   conversationId: string = '';
   form: FormGroup;
-  message: string = '';
+  aiResponse: string = '';
+  history: any;  
 
   constructor(
     private fb: FormBuilder,
@@ -30,15 +34,23 @@ export class ChatComponent {
     });
     this.chatService.messageStream$.subscribe({
       next: (chunk) => {
-        this.message += chunk;
+        this.aiResponse += chunk;
         setTimeout(() => this.scrollToBottom(), 0);
       },
       error: (error) => console.error(error)
     });
   }
 
-  ngOnInit(){
-    this.getConversations();
+  async ngOnChanges(changes: SimpleChanges) {
+    if (changes['id'] && changes['id'].currentValue && changes['id'].currentValue !== changes['id'].previousValue) {
+      await this.getChatHistory();
+      if (this.chatHistory.length > 0) {
+        this.history = this.chatHistory[0];
+        this.conversation = this.chatHistory[0].messages;
+        this.conversationId = this.chatHistory[0].id;
+      }
+      this.aiResponse = '';
+    }
   }
 
   private scrollToBottom(): void {
@@ -47,23 +59,30 @@ export class ChatComponent {
     } catch(err) {}
   }
 
-  async send(){
-    await this.getConversations();
+  async sendQuery(){
+    if(!this.id) return;
+    await this.getChatHistory();
+    this.reloadConversation();
     const content = this.form.value.text;
     this.conversation.push({content, id: `autoId${this.conversation.length}`, role: 'human'});
     this.form.reset();
-    this.message = '';
+    this.aiResponse = '';
     setTimeout(() => this.scrollToBottom(), 0);
     await this.getAiAnswer(content);
   }
 
-  getConversations(): Promise<void> {
+  reloadConversation(){
+    const currentHistory = this.chatHistory.find(c => c.id === this.conversationId);
+    this.conversation = currentHistory?.messages || [];
+    this.history = currentHistory;
+  }
+
+  getChatHistory(): Promise<void> {
     return new Promise((resolve) => {
-      this.chatService.getConversations(this.id).subscribe({
-        next: (conversations) => {
-          if(conversations.length > 0) {
-            this.conversation = conversations[0].messages;
-            this.conversationId = conversations[0].id;
+      this.chatService.getChatHistoryByPdf(this.id).subscribe({
+        next: (chatHistory) => {
+          if(chatHistory.length > 0) {
+            this.chatHistory = chatHistory;
           }
           resolve();
         },
@@ -82,5 +101,24 @@ export class ChatComponent {
     } catch (error) {
       console.error('Error:', error);
     }
+  }
+
+  addNewChatHistory(){
+    this.chatService.initiateConversation(this.id).subscribe(async () => {
+      await this.getChatHistory();
+      this.history = this.chatHistory[0];
+      this.conversation = this.chatHistory[0].messages;
+      this.conversationId = this.chatHistory[0].id;
+      this.aiResponse = '';
+      setTimeout(() => this.scrollToBottom(), 0);
+    })
+  }
+
+  async handleHistoryChange(event: SelectChangeEvent) {
+    await this.getChatHistory();
+    this.conversation = event.value.messages;
+    this.conversationId = event.value.id;
+    this.aiResponse = '';
+    setTimeout(() => this.scrollToBottom(), 0);
   }
 }

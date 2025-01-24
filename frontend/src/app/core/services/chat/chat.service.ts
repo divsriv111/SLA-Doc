@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Source } from '../../models/source.model';
 import { HttpClient } from '@angular/common/http';
-import { Observable, Subject } from 'rxjs';
+import { map, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -14,25 +13,26 @@ export class ChatService {
 
   constructor(private httpClient: HttpClient) { }
 
-  sources: Source[] = [
-    {name: 'SLA Document 1'},
-    {name: 'SLA Document 2'},
-    {name: 'SLA Document 3'},
-  ];
-
-  getSources(): Source[] {
-    return this.sources;
+  getChatRooms(){
+    return this.httpClient.get<any[]>(`${this.apiUrl}/pdfs/groups`, { withCredentials: true });
   }
 
   getPdfs(){
     return this.httpClient.get<any[]>(`${this.apiUrl}/pdfs`, { withCredentials: true });
   }
 
+  getPdfsByGroupId(groupId: string){
+    return this.httpClient.get<any[]>(`${this.apiUrl}/pdfs`, { withCredentials: true })
+      .pipe(
+        map(pdfs => pdfs.filter(pdf => pdf.group_id == groupId))
+      )
+  }
+
   getPdfById(id: string){
     return this.httpClient.get<any>(`${this.apiUrl}/pdfs/${id}`, { withCredentials: true });
   }
 
-  getConversations(id: string){
+  getChatHistoryByPdf(id: string){
     return this.httpClient.get<any[]>(`${this.apiUrl}/conversations?pdf_id=${id}`, { withCredentials: true });
   }
 
@@ -75,12 +75,15 @@ export class ChatService {
     }
   }
 
-  postPdf(file: File) {
+  postPdf(file: File, title?: string, groupId?: string) {
     const formData = new FormData();
     formData.append('file', file);
+    if(title) formData.append('group_title', title);
+    if(groupId) formData.append('group_id', groupId);
     
     return this.httpClient.post(`${this.apiUrl}/pdfs`, formData, {
       withCredentials: true
     });
   }
+
 }

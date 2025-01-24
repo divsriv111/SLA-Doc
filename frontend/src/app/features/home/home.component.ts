@@ -9,6 +9,8 @@ import { Observable } from 'rxjs';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Pdf } from '../../core/models/pdf.model';
+import { GlobalService } from '../../core/services/global/global.service';
+import { Group } from '../../core/models/group.model';
 
 
 @Component({
@@ -20,16 +22,21 @@ import { Pdf } from '../../core/models/pdf.model';
 })
 export class HomeComponent {
   savedChats$: Observable<Pdf[]> | undefined;
+  chatRooms$: Observable<Group[]> | undefined;
   visible: boolean = false;
 
   constructor(
     private router: Router, 
     private chatService: ChatService, 
     private confirmationService: ConfirmationService, 
-    private messageService: MessageService) {}
+    private messageService: MessageService,  
+    private globalService: GlobalService
+  ) {}
 
   ngOnInit() {
+    this.globalService.chatTitle = '';
     this.savedChats$ = this.chatService.getPdfs();
+    this.chatRooms$ = this.chatService.getChatRooms();
   }
 
   navigateToChat(id: string) {
