@@ -5,16 +5,12 @@
             <p-fileupload mode="basic" chooseLabel="Add source" chooseIcon="pi pi-plus" accept=".pdf" customUpload="true" auto="true" (uploadHandler)="onUpload($event)" class="add-src-btn w-full" />
         </div>
     </ng-template>
-    @if(pdfList.length !== 0){
-    <div class="flex align-items-center justify-content-between pb-2">
-        <label for="ny" class="ml-2">Select all sources</label>
-        <p-checkbox formControlName="selectAll" value="New York" inputId="ny" />
-    </div>
-    }
-    @for(item of pdfList; track item.id){
-    <div class="flex align-items-center justify-content-between pt-2">
-        <label [for]="item.id" class="ml-2 file-name"><i class="pi pi-file-pdf pr-2"></i>{{item.name.toLowerCase()}}</label>
-        <p-checkbox formControlName="city" value="New York" [inputId]="item.id" (onChange)="handleCheckboxChange($event, item.id)"/>
-    </div>
-    }
+    <form [formGroup]="formGroup">
+        @for(item of pdfList; track item.id){
+        <div class="flex align-items-center justify-content-between pt-2">
+            <label [for]="item.id" class="ml-2 file-name"><i class="pi pi-file-pdf pr-2"></i>{{item.name.toLowerCase()}}</label>
+            <p-radiobutton [value]="item.id" [inputId]="item.id" formControlName="selectedPdfId" (onClick)="handleSelection(item.id)"/>
+        </div>
+        }
+    </form>
 </p-card>
