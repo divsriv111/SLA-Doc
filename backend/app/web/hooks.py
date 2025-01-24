@@ -6,7 +6,7 @@ import logging
 from flask import g, session, request
 from sqlalchemy.exc import IntegrityError, NoResultFound
 from werkzeug.exceptions import Unauthorized, BadRequest
-from app.web.db.models import User, Model
+from app.web.db.models import User, Model, Group
 
 
 def load_model(Model: Model, extract_id_lambda=None):
@@ -64,6 +64,16 @@ def load_logged_in_user():
         except Exception:
             g.user = None
 
+def load_group():
+    if g.user is None:
+        g.group = None
+        return
+
+    group_id = request.args.get('group_id') or request.form.get('group_id')
+    if group_id:
+        g.group = Group.query.filter_by(id=group_id, user_id=g.user.id).first()
+    else:
+        g.group = None
 
 def handle_file_upload(fn):
     @functools.wraps(fn)

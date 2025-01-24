@@ -5,7 +5,7 @@ from app.web.db import db, init_db_command
 from app.web.db import models
 from app.celery import celery_init_app
 from app.web.config import Config
-from app.web.hooks import load_logged_in_user, handle_error, add_headers
+from app.web.hooks import load_logged_in_user, load_group, handle_error, add_headers
 from app.web.views import (
     auth_views,
     pdf_views,
@@ -54,5 +54,6 @@ def register_hooks(app):
          }}
          )
     app.before_request(load_logged_in_user)
+    app.before_request(load_group)
     app.after_request(add_headers)
     app.register_error_handler(Exception, handle_error)
