@@ -1,6 +1,19 @@
-<p-card [style]="{ width: '20rem', overflow: 'hidden', height: 'calc(100vh - 110px)' }">
+<p-card [style]="{ width: '25rem', overflow: 'hidden', height: 'calc(100vh - 110px)' }">
     <ng-template #header>
-        <p class="text-xl p-3 border-bottom-1">JSON</p>
+        <p class="text-xl p-3 border-bottom-1">Preview</p>
     </ng-template>
-    <p>{{extractedJSON | json}}</p>
+    <p-tabs value="0">
+        <p-tablist>
+            <p-tab value="0">PDF</p-tab>
+            <p-tab value="1">JSON</p-tab>
+        </p-tablist>
+        <p-tabpanels>
+            <p-tabpanel value="0">
+                <app-pdf-viewer [pdfId]="id"></app-pdf-viewer>
+            </p-tabpanel>
+            <p-tabpanel value="1">
+                <p>{{extractedJSON | json}}</p>
+            </p-tabpanel>
+        </p-tabpanels>
+    </p-tabs>
 </p-card>
