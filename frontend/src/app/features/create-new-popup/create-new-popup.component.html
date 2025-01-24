@@ -1,11 +1,11 @@
 <p-dialog header="Chat AI" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }" (onHide)="closePopup()">
     <span class="p-text-secondary block mb-3">Create new chat group.</span>
-    <div class="flex items-center gap-4 mb-4">
-        <label for="title" class="font-semibold w-24">Title</label>
-        <input pInputText id="title" class="flex-auto" autocomplete="off" [(ngModel)]="groupTitle" />
+    <div class="flex items-center gap-2 mb-4">
+        <input pInputText id="title" class="flex-auto" autocomplete="off" [(ngModel)]="groupTitle" placeholder="Title" />
+        <p-fileupload mode="basic" chooseLabel="Source" chooseIcon="pi pi-plus" accept=".pdf" customUpload="true" auto="true" (uploadHandler)="onUpload($event)" />
     </div>
     <div class="flex m-3">
-        <p-fileupload mode="basic" chooseLabel="Add source" chooseIcon="pi pi-plus" accept=".pdf" customUpload="true" auto="true" (uploadHandler)="onUpload($event)" class="add-src-btn w-full" />
+        <span class="text-sm">{{fileName}}</span>
     </div>
     <div class="flex justify-end gap-2">
         <p-button label="Cancel" severity="secondary" (click)="closePopup()" />

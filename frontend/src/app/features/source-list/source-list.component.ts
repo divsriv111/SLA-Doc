@@ -27,15 +27,12 @@ export class SourceListComponent {
   }
 
   onUpload(event: any) {
-    for (let file of event.files) {
-      this.pdfList.push({name: 'New File', id: `new_pdf_${this.pdfList.length+1}`});
-    }
     if(this.pdfList.length > 0){
       const {group_id, group_title} = this.pdfList[0];
       const file = event.files[0];
       this.chatService.postPdf(file, group_title, group_id).subscribe({
         next: (response: any) => {
-          this.startConversation(response.id);
+          this.startConversation(response);
         },
         error: (error) => {
           console.error('Upload failed', error);
@@ -44,10 +41,11 @@ export class SourceListComponent {
     }
   }
 
-  startConversation(pdf_id: string) {
-    this.chatService.initiateConversation(pdf_id).subscribe({
+  startConversation(pdf: Pdf) {
+    this.chatService.initiateConversation(pdf.id).subscribe({
       next: (response) => {
         console.log('Conversation started', response);
+        this.pdfList.push(pdf);
       },
       error: (error) => {
         console.error('Failed to start conversation', error);

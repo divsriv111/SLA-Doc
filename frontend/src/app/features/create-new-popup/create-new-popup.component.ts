@@ -18,6 +18,7 @@ export class CreateNewPopupComponent {
   @Output() onSubmit: EventEmitter<string> = new EventEmitter<string>();
   file: any;
   groupTitle: string = '';
+  fileName: string = '';
 
   constructor(private chatService: ChatService) {}
 
@@ -40,6 +41,7 @@ export class CreateNewPopupComponent {
 
   onUpload(event: any) {
     this.file = event.files[0];
+    this.fileName = this.file.name;
   }
 
   startConversation(pdf_id: string, group_id: string) {
