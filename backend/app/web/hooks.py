@@ -61,7 +61,6 @@ def load_logged_in_user():
     else:
         try:
             g.user = User.find_by(id=user_id)
-            load_group()
         except Exception:
             g.user = None
 

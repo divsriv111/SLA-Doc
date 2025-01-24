@@ -64,6 +64,12 @@ def show(pdf):
         }
     )
 
+@bp.route("/groups", methods=["GET"])
+@login_required
+def list_groups():
+    groups = Group.query.filter_by(user_id=g.user.id).all()
+    return jsonify([group.as_dict() for group in groups])
+
 
 @bp.route("/<string:pdf_id>/extract", methods=["POST"])
 @login_required

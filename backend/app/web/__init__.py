@@ -54,6 +54,6 @@ def register_hooks(app):
          }}
          )
     app.before_request(load_logged_in_user)
-    # app.before_request(load_group)
+    app.before_request(load_group)
     app.after_request(add_headers)
     app.register_error_handler(Exception, handle_error)
