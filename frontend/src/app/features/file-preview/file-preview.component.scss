@@ -10,3 +10,8 @@
     max-height: calc(100vh - 250px);
     overflow-y: auto;
 }
+.file-preview {
+    ::ng-deep .p-card-body {
+        padding-top: 0;
+    }
+}
