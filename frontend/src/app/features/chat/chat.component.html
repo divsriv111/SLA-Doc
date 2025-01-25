@@ -3,16 +3,23 @@
         <div class="border-bottom-1 flex align-items-center justify-content-between">
             <p class="text-xl p-3">Chat</p>
             <div class="flex gap-2 mr-3">
-                <p-select [(ngModel)]="history" (onChange)="handleHistoryChange($event)" [options]="chatHistory" optionLabel="id" placeholder="History" class="w-56" />
+                <p-select [(ngModel)]="history" (onChange)="handleHistoryChange($event)" [options]="chatHistory" optionLabel="id" placeholder="History" class="w-19rem" />
                 <p-button size="large" (click)="addNewChatHistory()" label="New Chat" [disabled]="!id" />
             </div>
         </div>
     </ng-template>
     <div class="chats-container" #chatContainer>
+    @if(conversation.length === 0){
+        <div class="flex gap-4 mt-3 pl-2 pr-2 align-items-center justify-content-center chat-placeholder">
+            <div class="p-3">
+                <h1>Start a conversation by typing a message in the text area below</h1>
+            </div>
+        </div>
+    }
     @for(message of conversation; track message.id){
         <div class="flex gap-4 mt-3 pl-2 pr-2" [ngClass]="{'justify-content-end': message.role === 'human'}">
-            <div [class]="message.role === 'ai' ? 'p-3 border-round-lg' : 'bg-green text-white p-3 border-round-lg'">
-                <p>{{message.content}}</p>
+            <div [class]="message.role === 'ai' ? 'p-3 border-round-lg' : 'pt-1 pb-1 pl-3 pr-3 border-round-xl shadow-1 message-bubble'">
+                <p class="text-justify">{{message.content}}</p>
             </div>
         </div>
     }
@@ -27,7 +34,7 @@
     <ng-template #footer>
         <form [formGroup]="form">
             <div class="flex gap-4 mt-1 pr-2 pt-2 align-items-center border-1 border-round-lg">
-                <textarea (keyup.enter)="sendQuery()" rows="4" cols="30" pTextarea formControlName="text" class="w-full chat-text"></textarea>
+                <textarea (keyup.enter)="sendQuery()" rows="4" cols="30" pTextarea formControlName="text" class="w-full chat-text" placeholder="Start typing..."></textarea>
                 <p-button icon="pi pi-send" class="ml-2" [rounded]="true" size="large" (click)="sendQuery()" [disabled]="!id"></p-button>
             </div>
         </form>
