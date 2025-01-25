@@ -7,6 +7,7 @@ from app.web.db.models import Group
 from app.web.tasks.embeddings import process_document
 from app.web import files
 import uuid
+import json
 
 bp = Blueprint("pdf", __name__, url_prefix="/api/pdfs")
 
@@ -34,13 +35,15 @@ def upload_file(file_id, file_path, file_name):
         group = Group(id=group_id, title=group_title, user_id=g.user.id)
         db.session.add(group)
         db.session.commit()
-        print("Group not found, creating a new one - " + group_title + " - " + group_id + " - " + g.user.id)
+        print("Group not found, creating a new one - " +
+              group_title + " - " + group_id + " - " + g.user.id)
 
     res, status_code = files.upload(file_path)
     if status_code >= 400:
         return res, status_code
 
-    pdf = Pdf.create(id=file_id, name=file_name, user_id=g.user.id, group_id=group.id)
+    pdf = Pdf.create(id=file_id, name=file_name,
+                     user_id=g.user.id, group_id=group.id)
 
     process_document.delay(pdf.id)
 
@@ -64,6 +67,7 @@ def show(pdf):
         }
     )
 
+
 @bp.route("/groups", methods=["GET"])
 @login_required
 def list_groups():
@@ -76,13 +80,15 @@ def list_groups():
 @load_model(Pdf)
 def extract_data(pdf):
     # Check if data is already extracted
-    if pdf.extracted_data:
-        return jsonify({"data": pdf.extracted_data})
+    # if pdf.extracted_data:
+    #     if not (pdf.extracted_data.__contains__("unable to analyze") or pdf.extracted_data.__contains__("sorry")):
+    #         return jsonify(pdf.extracted_data)
 
     # Extract data using existing chunks from Pinecone
     extracted_data = files.extract_pdf_data(pdf.id)
 
     # Save extracted data
-    pdf.update(extracted_data=extracted_data)
+    pdf.extracted_data = json.dumps(extracted_data)
+    pdf.save()
 
-    return jsonify({"data": extracted_data})
+    return jsonify(extracted_data)

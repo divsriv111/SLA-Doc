@@ -8,13 +8,12 @@ from app.chat import create_embeddings_for_pdf
 
 
 def extract_and_update(pdf_path, pdf):
-    time.delay(10)
     extracted_data = extract_pdf_data(pdf_path)
     pdf.update(extracted_data=extracted_data)
 
 
 @shared_task()
-def process_document(pdf_id: int, extract_data: bool = True):
+def process_document(pdf_id: int, extract_data: bool = False):
     pdf = Pdf.find_by(id=pdf_id)
     with download(pdf.id) as pdf_path:
         # Create embeddings
@@ -22,5 +21,4 @@ def process_document(pdf_id: int, extract_data: bool = True):
 
         # Optionally extract data
         if extract_data:
-            thread = threading.Thread(target=extract_and_update, args=(pdf_path, pdf))
-            thread.start()
+            extract_and_update(pdf_path, pdf)
