@@ -25,6 +25,9 @@ export class CreateNewPopupComponent {
 
   closePopup() {
     this.visible = false;
+    this.groupTitle = '';
+    this.file = null;
+    this.fileName = '';
     this.visibleChange.emit(this.visible);
   }
 
