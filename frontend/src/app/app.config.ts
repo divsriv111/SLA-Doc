@@ -4,19 +4,24 @@ import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeng/themes/aura';
 
 import { routes } from './app.routes';
-import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
-import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
+import {
+  provideClientHydration,
+  withEventReplay,
+} from '@angular/platform-browser';
+import {
+  provideHttpClient,
+  withFetch,
+  withInterceptors,
+} from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { authInterceptor } from './core/auth/auth.interceptor';
+import { provideHighlightOptions } from 'ngx-highlightjs';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideHttpClient(
-      withFetch(),
-      withInterceptors([authInterceptor])
-    ),
-    provideRouter(routes, withComponentInputBinding()), 
+    provideHttpClient(withFetch(), withInterceptors([authInterceptor])),
+    provideRouter(routes, withComponentInputBinding()),
     provideClientHydration(withEventReplay()),
     provideAnimationsAsync(),
     providePrimeNG({
@@ -25,9 +30,12 @@ export const appConfig: ApplicationConfig = {
         options: {
           prefix: 'p',
           darkModeSelector: 'system',
-          cssLayer: false
-        }
-      }
-    })
-  ]
+          cssLayer: false,
+        },
+      },
+    }),
+    provideHighlightOptions({
+      fullLibraryLoader: () => import('highlight.js'),
+    }),
+  ],
 };

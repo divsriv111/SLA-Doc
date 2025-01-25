@@ -1,10 +1,11 @@
-import { Component, Input, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { ChatService } from '../../core/services/chat/chat.service';
 import { CommonModule } from '@angular/common';
 import { CardModule } from 'primeng/card';
 import { PdfViewerComponent } from '../pdf-viewer/pdf-viewer.component';
 import { TabsModule } from 'primeng/tabs';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { Highlight } from 'ngx-highlightjs';
 
 @Component({
   selector: 'app-file-preview',
@@ -14,25 +15,29 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
     PdfViewerComponent,
     TabsModule,
     ProgressSpinnerModule,
+    Highlight,
   ],
   templateUrl: './file-preview.component.html',
   styleUrl: './file-preview.component.scss',
 })
-export class FilePreviewComponent {
+export class FilePreviewComponent implements OnChanges {
   @Input() id: string = '';
-  extractedJSON: any = null;
+  extractedJSON: string | null = null;
+  formattedJSON: string = '';
 
   constructor(private chatService: ChatService) {}
 
   ngOnChanges(changes: SimpleChanges) {
-    if (
-      changes['id'] &&
-      changes['id'].currentValue &&
-      changes['id'].currentValue !== changes['id'].previousValue
-    ) {
+    if (changes['id']?.currentValue !== changes['id']?.previousValue) {
       this.chatService.extractJSON(this.id).subscribe((response) => {
-        console.log('JSON response ', response);
-        this.extractedJSON = response;
+        try {
+          const parsedJSON =
+            typeof response === 'string' ? JSON.parse(response) : response;
+          this.formattedJSON = JSON.stringify(parsedJSON, null, 2);
+          this.extractedJSON = this.formattedJSON;
+        } catch (e) {
+          this.extractedJSON = JSON.stringify(response);
+        }
       });
     }
   }

@@ -17,7 +17,9 @@
       <p-tabpanel value="1">
         <p-card>
           <ng-container *ngIf="extractedJSON !== null; else loading">
-            <pre class="json-preview">{{ extractedJSON }}</pre>
+            <pre
+              class="json-preview"
+            ><code [highlight]="formattedJSON" language="json"></code></pre>
           </ng-container>
           <ng-template #loading>
             <div class="flex justify-content-center align-items-center p-4">

@@ -81,7 +81,8 @@ def list_groups():
 def extract_data(pdf):
     # Check if data is already extracted
     if pdf.extracted_data:
-        if not (pdf.extracted_data.__contains__("unable to analyze") or pdf.extracted_data.__contains__("sorry")):
+        if not (pdf.extracted_data.__contains__("unable to analyze") or pdf.extracted_data.__contains__("sorry") or pdf.extracted_data.__contains__('{}')):
+            print(f"pdf.extracted_data: {pdf.extracted_data}")
             return jsonify(pdf.extracted_data)
 
     # Extract data using existing chunks from Pinecone

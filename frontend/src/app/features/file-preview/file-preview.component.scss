@@ -1,17 +1,39 @@
 .json-preview {
-    background-color: #f8f9fa;
-    padding: 1rem;
-    border-radius: 6px;
-    font-family: monospace;
+  background-color: #1e1e1e;
+  padding: 1rem;
+  border-radius: 6px;
+  margin: 0;
+
+  code {
+    font-family: "Consolas", "Monaco", "Courier New", monospace;
     white-space: pre-wrap;
     word-wrap: break-word;
     font-size: 0.875rem;
     line-height: 1.5;
-    max-height: calc(100vh - 250px);
-    overflow-y: auto;
+    color: #d4d4d4;
+  }
 }
+
 .file-preview {
-    ::ng-deep .p-card-body {
-        padding-top: 0;
-    }
+  ::ng-deep .p-card-body {
+    padding-top: 0;
+  }
+}
+
+:host ::ng-deep {
+  .hljs-string {
+    color: #ce9178;
+  }
+  .hljs-number {
+    color: #b5cea8;
+  }
+  .hljs-boolean {
+    color: #569cd6;
+  }
+  .hljs-null {
+    color: #569cd6;
+  }
+  .hljs-property {
+    color: #9cdcfe;
+  }
 }
