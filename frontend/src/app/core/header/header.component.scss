@@ -1,0 +1,20 @@
+.logo {
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    a {
+        background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+        display: inline-block;
+        padding: 5px;
+        
+        &:hover {
+            transform: translateY(-2px);
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.2);
+        }
+    }
+}
