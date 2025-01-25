@@ -80,9 +80,9 @@ def list_groups():
 @load_model(Pdf)
 def extract_data(pdf):
     # Check if data is already extracted
-    # if pdf.extracted_data:
-    #     if not (pdf.extracted_data.__contains__("unable to analyze") or pdf.extracted_data.__contains__("sorry")):
-    #         return jsonify(pdf.extracted_data)
+    if pdf.extracted_data:
+        if not (pdf.extracted_data.__contains__("unable to analyze") or pdf.extracted_data.__contains__("sorry")):
+            return jsonify(pdf.extracted_data)
 
     # Extract data using existing chunks from Pinecone
     extracted_data = files.extract_pdf_data(pdf.id)

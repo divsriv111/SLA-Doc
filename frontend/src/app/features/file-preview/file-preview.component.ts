@@ -4,12 +4,19 @@ import { CommonModule } from '@angular/common';
 import { CardModule } from 'primeng/card';
 import { PdfViewerComponent } from '../pdf-viewer/pdf-viewer.component';
 import { TabsModule } from 'primeng/tabs';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @Component({
   selector: 'app-file-preview',
-  imports: [CommonModule, CardModule, PdfViewerComponent, TabsModule],
+  imports: [
+    CommonModule,
+    CardModule,
+    PdfViewerComponent,
+    TabsModule,
+    ProgressSpinnerModule,
+  ],
   templateUrl: './file-preview.component.html',
-  styleUrl: './file-preview.component.scss'
+  styleUrl: './file-preview.component.scss',
 })
 export class FilePreviewComponent {
   @Input() id: string = '';
@@ -18,12 +25,15 @@ export class FilePreviewComponent {
   constructor(private chatService: ChatService) {}
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['id'] && changes['id'].currentValue && changes['id'].currentValue !== changes['id'].previousValue) {
-      this.chatService.extractJSON(this.id).subscribe(response => {
+    if (
+      changes['id'] &&
+      changes['id'].currentValue &&
+      changes['id'].currentValue !== changes['id'].previousValue
+    ) {
+      this.chatService.extractJSON(this.id).subscribe((response) => {
         console.log('JSON response ', response);
         this.extractedJSON = response;
       });
     }
   }
-
 }
