@@ -1,4 +1,4 @@
-<p-card [style]="{ width: '25rem', overflow: 'hidden', height: 'calc(100vh - 110px)' }">
+<p-card [style]="{ width: 'auto', overflow: 'hidden', height: 'calc(100vh - 110px)' }">
     <ng-template #header>
         <p class="text-xl p-3 border-bottom-1">Preview</p>
     </ng-template>
@@ -12,7 +12,7 @@
                 <app-pdf-viewer [pdfId]="id"></app-pdf-viewer>
             </p-tabpanel>
             <p-tabpanel value="1">
-                <p>{{extractedJSON | json}}</p>
+                <pre class="json-preview">{{extractedJSON | json}}</pre>
             </p-tabpanel>
         </p-tabpanels>
     </p-tabs>

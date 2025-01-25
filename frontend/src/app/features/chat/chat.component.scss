@@ -5,9 +5,32 @@
     resize: none;
 }
 .chats-container {
-    max-height: calc(100vh - 359px);
+    height: calc(100vh - 359px);
     overflow-y: auto;
 }
 .bg-green {
     background-color: #059669;
+}
+.chat-placeholder {
+    height: calc(100% - 20px) !important;
+    line-height: 45px;
+    color: #64748b;
+    text-align: center;
+}
+.message-bubble {
+    position: relative;
+    max-width: 80%;
+    min-width: 100px;
+    background-color: #d3f9e6;
+    
+    &::before {
+        content: '';
+        position: absolute;
+        right: -8px;
+        bottom: 0;
+        width: 20px;
+        height: 20px;
+        background-color: #d3f9e6;
+        clip-path: polygon(0 0, 0% 100%, 100% 100%);
+    }
 }

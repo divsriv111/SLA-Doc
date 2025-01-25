@@ -1,5 +1,6 @@
 #pdf-container {
     overflow: auto;
-    width: 22rem;
+    width: 100%;
+    max-width: 41rem;
     height: calc(100vh - 300px);
 }

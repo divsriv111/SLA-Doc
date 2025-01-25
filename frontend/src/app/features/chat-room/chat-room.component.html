@@ -1,11 +1,11 @@
 <div class="flex gap-3">
-    <div class="flex-shrink-1 pl-3">
+    <div class="flex-shrink pl-3">
         <app-source-list [pdfList]="pdfList" (onDocChange)="documentChange($event)"></app-source-list>
     </div>
-    <div class="flex-grow-1">
+    <div class="flex-1">
         <app-chat [id]="currentDocId"></app-chat>
     </div>
-    <div class="flex-shrink-1 pr-3">
+    <div class="flex-1 pr-3">
         <app-file-preview [id]="currentDocId"></app-file-preview>
     </div>
 </div>
