@@ -41,4 +41,15 @@ export class FilePreviewComponent implements OnChanges {
       });
     }
   }
+
+  downloadJSON() {
+    if (!this.extractedJSON) return;
+    const blob = new Blob([this.extractedJSON], { type: 'application/json' });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `${this.id}.json`);
+    link.click();
+    link.remove();
+  }
 }

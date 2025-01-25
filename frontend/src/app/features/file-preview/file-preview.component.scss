@@ -3,6 +3,8 @@
   padding: 1rem;
   border-radius: 6px;
   margin: 0;
+  height: calc(100vh - 300px);
+  overflow-y: auto;
 
   code {
     font-family: "Consolas", "Monaco", "Courier New", monospace;
