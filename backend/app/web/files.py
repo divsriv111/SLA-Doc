@@ -64,13 +64,17 @@ def extract_pdf_data(pdf_id: str) -> dict:
 
 def extract_json_from_string(string):
     # Regex pattern to match JSON data
-    pattern = re.compile(r'```json\n(.*?)\n```', re.DOTALL)
-    matches = pattern.findall(string)
+    try:
+        pattern = re.compile(r'```json\n(.*?)\n```', re.DOTALL)
+        matches = pattern.findall(string)
 
-    if matches:
-        json_data = matches[0]
-        return json.loads(json_data)
-    else:
+        if matches:
+            json_data = matches[0]
+            return json.loads(json_data)
+        else:
+            return string
+    except Exception as e:
+        print(f"Error: {e}")
         return string
 
 
