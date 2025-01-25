@@ -28,7 +28,7 @@ export class FilePreviewComponent implements OnChanges {
   constructor(private chatService: ChatService) {}
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['id']?.currentValue !== changes['id']?.previousValue) {
+    if (changes['id']?.currentValue && changes['id']?.currentValue !== changes['id']?.previousValue) {
       this.chatService.extractJSON(this.id).subscribe((response) => {
         try {
           const parsedJSON =

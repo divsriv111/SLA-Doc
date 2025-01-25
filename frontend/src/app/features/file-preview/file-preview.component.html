@@ -12,7 +12,13 @@
     </p-tablist>
     <p-tabpanels>
       <p-tabpanel value="0">
-        <app-pdf-viewer [pdfId]="id"></app-pdf-viewer>
+        @if (id) {
+          <app-pdf-viewer [pdfId]="id"></app-pdf-viewer>
+        } @else {
+          <div class="flex justify-content-center align-items-center h-full">
+            <p class="text-lg text-500">No file selected</p>
+          </div>
+        }
       </p-tabpanel>
       <p-tabpanel value="1">
         <p-card>
