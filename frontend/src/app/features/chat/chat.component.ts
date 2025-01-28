@@ -82,7 +82,10 @@ export class ChatComponent {
       this.chatService.getChatHistoryByPdf(this.id).subscribe({
         next: (chatHistory) => {
           if(chatHistory.length > 0) {
-            this.chatHistory = chatHistory;
+            this.chatHistory = chatHistory.map(conversation => ({
+              ...conversation,
+              title: conversation.messages[0] ? conversation.messages[0].content?.slice(0, 35) + '...' : 'New Chat'
+            }));
           }
           resolve();
         },

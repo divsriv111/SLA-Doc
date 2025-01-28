@@ -3,7 +3,7 @@
         <div class="border-bottom-1 flex align-items-center justify-content-between">
             <p class="text-xl p-3 mb-0">Chat</p>
             <div class="flex gap-2 mr-3">
-                <p-select [(ngModel)]="history" (onChange)="handleHistoryChange($event)" [options]="chatHistory" optionLabel="id" placeholder="History" class="w-19rem" />
+                <p-select [(ngModel)]="history" (onChange)="handleHistoryChange($event)" [options]="chatHistory" optionLabel="title" placeholder="History" class="w-19rem" />
                 <p-button size="large" (click)="addNewChatHistory()" label="New Chat" [disabled]="!id" />
             </div>
         </div>
