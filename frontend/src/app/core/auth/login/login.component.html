@@ -1,5 +1,10 @@
 <div class="flex justify-content-center items-center h-full">
     <p-card [style]="{ overflow: 'hidden', height: 'auto', width: '500px' }">
+        <div class="text-center mb-6">
+            <i class="pi pi-comments text-4xl text-primary animated-icon"></i>
+            <h1 class="text-3xl font-bold mb-2 gradient-text">Chat AI</h1>
+            <p class="text-600">Sign in to your account</p>
+        </div>
         <form [formGroup]="form">
             <div class="flex items-center gap-4 mb-4">
                 <input pInputText id="email" formControlName="email" class="flex-auto" autocomplete="off" placeholder="Email" />
@@ -7,10 +12,9 @@
             <div class="flex items-center gap-4 mb-4">
                 <input pInputText type="password" id="password" formControlName="password" class="flex-auto" autocomplete="off" placeholder="Password" />
             </div>
-            <div class="flex justify-content-end gap-2">
-                <p-button label="Login" (click)="login()" />
-                <p-toast></p-toast>
-            </div>
+            <p-button label="Sign In" (click)="login()" styleClass="w-full">
+            </p-button>
+            <p-toast></p-toast>
         </form>
     </p-card>
 </div>

@@ -20,11 +20,13 @@ export class RegisterComponent {
   constructor(
     private authService: AuthService, 
     private fb: FormBuilder,
-    private messageService: MessageService
+    private messageService: MessageService,
   ) {
     this.form = this.fb.group({
+      name: [''],
       email: [''],
-      password: ['']
+      password: [''],
+      confirmPassword: ['']
     });
   }
 
@@ -36,6 +38,7 @@ export class RegisterComponent {
           summary: 'Success',
           detail: 'Sign up successful.'
         });
+        this.form.reset();
       }, 
       error: () => {
         this.messageService.add({
